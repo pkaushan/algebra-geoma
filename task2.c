@@ -25,7 +25,7 @@ int main (){
                 printf("%d %d колл\n", i+1, j+1);
                 break;
             }
-            int ratio = 0;
+            double ratio = 0;
             for (int coord = 0; coord<3; coord++){
                if (v[i][coord]!=0){
                    ratio = v[j][coord]/v[i][coord];
