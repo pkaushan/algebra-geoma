@@ -11,8 +11,6 @@ void swap(double *a, double *b){
 }
 
 void gauss (double a[N][N], int n, int k) {
-    int where[N]={0};
-    for (int i = 0; i<n; i++) where[i]=-1;
     for (int col=0, row=0; col < n && row < k; ++col) {
         int sel = row;
         for (int i=row; i<k; ++i)
@@ -20,7 +18,6 @@ void gauss (double a[N][N], int n, int k) {
                 sel = i;
         for (int i=col; i < n; ++i)
             swap (&a[sel][i], &a[row][i]);
-        where[col] = row;
 
         for (int i=0; i<k; ++i)
             if (i != row) {
@@ -55,11 +52,7 @@ int main(){
         }
     }
 
-    if (k == num_of_independent_vectors){
-        printf("линейно независимы");
-        printf("\n");
-        } else printf("линейно зависимы");
-        printf("\n");
+    printf("is linearly independent %d\n", k == num_of_independent_vectors) ;
     for (int i =0; i<k; i++){
         if(!zero_vector[i]) {
             for(int j = 0; j<n; j++){
