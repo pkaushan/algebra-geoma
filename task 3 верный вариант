@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include "math.h"
+#define N 100
+#define EPS 0.000001
+
+void swap(double *a, double *b){
+    double tmp = *a;
+    *a=*b;
+    *b=tmp;
+}
+
+void gauss (double a[N][N], int n, int k) {
+    int where[N]={0};
+    for (int i = 0; i<n; i++) where[i]=-1;
+    for (int col=0, row=0; col < n && row < k; ++col) {
+        int sel = row;
+        for (int i=row; i<k; ++i)
+            if (fabs (a[i][col]) > fabs (a[sel][col]))
+                sel = i;
+        for (int i=col; i < n; ++i)
+            swap (&a[sel][i], &a[row][i]);
+        where[col] = row;
+
+        for (int i=0; i<k; ++i)
+            if (i != row) {
+                if (a[row][col] != 0){
+                    double c = a[i][col] / a[row][col];
+                    for (int j=col; j < n; ++j)
+                        a[i][j] -= a[row][j] * c;
+                }
+            }
+        ++row;
+    }
+}
+
+int main(){
+    int n, k;
+    double a[N][N];
+    scanf("%d%d" , &n, &k);
+    for ( int i=0; i<k; i++)
+        for ( int j=0; j<n; j++)
+            scanf("%lf", &a[i][j]);
+    gauss(a, n, k);
+    _Bool zero_vector [N];
+    int num_of_independent_vectors = 0;
+    for (int i =0; i<k; i++){
+        zero_vector[i]=1;
+        for (int j =0; j< n; j++){
+            if(fabs(a[i][j]) > EPS) {
+                zero_vector[i] = 0;
+                num_of_independent_vectors++;
+                break;
+            }
+        }
+    }
+
+    if (k == num_of_independent_vectors){
+        printf("линейно независимы");
+        printf("\n");
+        } else printf("линейно зависимы");
+        printf("\n");
+    for (int i =0; i<k; i++){
+        if(!zero_vector[i]) {
+            for(int j = 0; j<n; j++){
+                printf("%lf ", a[i][j]);
+            }
+            printf("\n");
+        }
+    }
+
+
+
+}
