@@ -52,7 +52,10 @@ int main(){
         }
     }
 
-    printf("is linearly independent %d\n", k == num_of_independent_vectors) ;
+    if (k == num_of_independent_vectors){
+        printf("not linearly independent ");
+    } else printf("is linearly independent");
+    printf("\n");
     for (int i =0; i<k; i++){
         if(!zero_vector[i]) {
             for(int j = 0; j<n; j++){
