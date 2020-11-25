@@ -1,0 +1,83 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include "math.h"
+
+#define N 100
+
+double **minor(double **a, int size, int row, int col) {
+    double **m = malloc(sizeof(double *) * (size - 1));
+    for (int i = 0; i < size - 1; i++) {
+        m[i] = malloc(sizeof(double) * (size - 1));
+    }
+
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (i == row || j == col) continue;
+            int m_i = i < row ? i : i - 1;
+            int m_j = j < col ? j : j - 1;
+            m[m_i][m_j] = a[i][j];
+            m_j++;
+        }
+    }
+    return m;
+}
+
+double det(double **a, int size) {
+    double d = 0;
+    if (size == 1) {
+        return a[0][0];
+    } else if (size == 2) {
+        return a[0][0] * a[1][1] - a[0][1] * a[1][0];
+    } else {
+        for (int col = 0; col < size; col++) {
+            double **m = minor(a, size, 0, col);
+            d += pow(-1, col + 2) * det(m, size - 1) * a[0][col];
+            for (int i = 0; i < size - 1; i++) {
+                free(m[i]);
+            }
+            free(m);
+        }
+    }
+    return d;
+
+}
+
+
+int main() {
+    int n = 0;
+    scanf("%d", &n);
+    double **a = malloc(sizeof(double *) * n);
+    for (int i = 0; i < n; i++) {
+        a[i] = malloc(sizeof(double) * n);
+    }
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%lf", &a[i][j]);
+        }
+    }
+    double d = det(a, n);
+    if (d == 0) {
+        printf("det=0");
+        exit(0);
+    }
+    double **b = malloc(sizeof(double *) * n);
+    for (int i = 0; i < n; i++) {
+        b[i] = malloc(sizeof(double) * n);
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            double **m = minor(a, n, i, j);
+            b[j][i] = det(m, n - 1) * pow(-1, i + j) / d;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            printf("%lf ", b[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
