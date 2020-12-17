@@ -39,11 +39,21 @@ void divide_row(double a[N][N], int n, int row_num, double divider) { //деле
 }
 
 _Bool isIdentityMatrix(double a[N][N], int n, int m) {
+    if (m == 1){
+        int non_zero_vals = 0;
+        for (int i = 0;i<n;i++){
+            if (a[m-1][i] !=0) non_zero_vals++;
+        }
+        if (non_zero_vals >1){
+            return 0;
+        } else return 1;
+    }
     for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
             if (a[i][j] != 0 && i != j) return 0;
         }
     }
+
     return 1;
 }
 
@@ -71,6 +81,7 @@ int main() {
         printf("\n");
     }
 
+
     _Bool printedValues[N] = {0};
     if (!isIdentityMatrix(a, n, m)) {
         for (int i = 0; i < m; i++) { //вывод
@@ -85,13 +96,14 @@ int main() {
                         printedValues[j] = 1;
                     }
                     for (int k = j + 1; k < n; k++) {
-                        if (a[i][k] != 0) {
+                        if (a[i][k] > EPS) {
                             if (printed) printf(" + ");
                             printf("%lf*x%d", -a[i][k],
                                    k); //вывод значения с минусом, так как переносим на другую сторону
                             printed = 1;
                         }
                     }
+                    if (!printed) printf("0");
                     printf("\n");
                     break;
                 }
@@ -101,7 +113,7 @@ int main() {
             if (!printedValues[i]) printf("x%d = 1\n", i);
         }
     } else {
-        for (int i = 0; i < m; i++) {
+        for (int i = 0; i < n; i++) {
             printf("x%d = 0\n", i);
         }
     }
